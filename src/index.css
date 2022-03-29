@@ -331,6 +331,7 @@ select {
 }
 
 .alert {
+    margin-left: 0.5rem;
     color: #FF5A5F;
 }
 
