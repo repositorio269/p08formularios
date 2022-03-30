@@ -1,22 +1,22 @@
 import { useEffect, useState } from "react"
 
-export default function useTextInput(data) {
+export default function useTextInput(inputData) {
 
-    const [value, setValue] = useState(data.value);
+    const [data, setData] = useState(inputData);
     const [validation, setValidation] = useState({
         valid: data.valid,
         errorMessage: data.errorMessages[0]
     })
 
-    const handleOnChange = e => setValue(e.target.value);
+    const handleOnChange = e => setData({...data, value: e.target.value});
 
     useEffect(() => {
-        if(value.length === 0 && !validation.valid) {
+        if(data.value.length === 0 && !validation.valid) {
             setValidation({
                 valid: false,
                 errorMessage: data.errorMessages[0]
             })
-        } else if(!new RegExp(data.pattern).test(value)) {
+        } else if(!new RegExp(data.pattern).test(data.value)) {
             setValidation({
                 valid: false,
                 errorMessage: data.errorMessages[1]
@@ -27,7 +27,7 @@ export default function useTextInput(data) {
                 errorMessage: ''
             })
         }
-    }, [value])
+    }, [data, validation.valid])
 
     const input = (
         <>
@@ -36,11 +36,11 @@ export default function useTextInput(data) {
                 <span className="alert">{validation.errorMessage}</span>
             </label>
             <input type="text" 
-                   value={value}
+                   value={data.value}
                    maxLength={data.maxLength}
                    onChange={handleOnChange}/>
         </>
     )
 
-    return [input, value, validation.valid];
+    return [input, data.value, validation.valid];
 }
